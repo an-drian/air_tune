@@ -19,7 +19,7 @@ defmodule Seeds do
   def run(path = "#{__DIR__}/seeds/stations2.json", insert), do: run_as_stream(path, insert)
 
   def run(path, insert) do
-    Enum.each(Seeds.get_json(path), fn item -> insert.(item) end)
+    Enum.each(get_json(path), fn item -> insert.(item) end)
   end
 
   defp run_as_stream(path, insert) do
