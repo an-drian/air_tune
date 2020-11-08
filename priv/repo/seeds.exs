@@ -15,7 +15,29 @@ alias AirTune.Radio.{ Language, Tag, Country, Station, StationTag }
 
 
 defmodule Seeds do
-  def get_json(path) do
+  def run(path = "#{__DIR__}/seeds/stations.json", insert), do: run_as_stream(path, insert)
+  def run(path = "#{__DIR__}/seeds/stations2.json", insert), do: run_as_stream(path, insert)
+
+  def run(path, insert) do
+    Enum.each(Seeds.get_json(path), fn item -> insert.(item) end)
+  end
+
+  defp run_as_stream(path, insert) do
+    path
+    |> File.stream!()
+    |> Jaxon.Stream.from_enumerable()
+    |> Jaxon.Stream.query([:root])
+    |> Enum.to_list
+    |> hd
+    |> Enum.map(fn item -> string_key_to_atom(item) end)
+    |> Enum.each(fn item -> insert.(item) end)
+  end
+
+  defp string_key_to_atom(item) do
+    for { key, val } <- item, into: %{}, do: {String.to_atom(key), val}
+  end
+
+  defp get_json(path) do
     json = with {:ok, body} <- File.read(path),
                 {:ok, json} <- Jason.decode(body, keys: :atoms) do
         json
@@ -25,10 +47,6 @@ defmodule Seeds do
         IO.inspect(err)
     end
     json
-  end
-
-  def run(path, insert) do
-   Enum.each(Seeds.get_json(path), fn item -> insert.(item) end)
   end
 end
 
@@ -111,8 +129,8 @@ defmodule Seeds.StationTag do
   end
 end
 
-# Seeds.run("#{__DIR__}/seeds/lang.json", &Seeds.Languages.insert/1)
-# Seeds.run("#{__DIR__}/seeds/tags.json", &Seeds.Tags.insert/1)
-# Seeds.run("#{__DIR__}/seeds/countries.json", &Seeds.Countries.insert/1)
+Seeds.run("#{__DIR__}/seeds/lang.json", &Seeds.Languages.insert/1)
+Seeds.run("#{__DIR__}/seeds/tags.json", &Seeds.Tags.insert/1)
+Seeds.run("#{__DIR__}/seeds/countries.json", &Seeds.Countries.insert/1)
 Seeds.run("#{__DIR__}/seeds/stations.json", &Seeds.Stations.insert/1)
 Seeds.run("#{__DIR__}/seeds/stations2.json", &Seeds.Stations.insert/1)
