@@ -1,4 +1,4 @@
-defmodule AirTuneWeb.PageController do
+defmodule AirTuneWeb.HomeController do
   use AirTuneWeb, :controller
 
   import Ecto.Query
@@ -12,7 +12,7 @@ defmodule AirTuneWeb.PageController do
       order_by: [desc: :clickcount],
       limit: 10
     stations = @repo.all(query)
-    IO.inspect("STACKs")
+
     render(conn, "index.html", stations: stations)
   end
 end

@@ -132,3 +132,15 @@ header nav a {
     margin: 2rem 1rem;
   }
 }
+
+.main-nav {
+  display: flex;
+}
+
+.main-nav ul {
+  display: flex;
+}
+
+.main-nav ul li {
+  margin-left: 20px;
+}

@@ -1,4 +1,4 @@
-defmodule AirTuneWeb.PageControllerTest do
+defmodule AirTuneWeb.HomeControllerTest do
   use AirTuneWeb.ConnCase
 
   test "GET /", %{conn: conn} do

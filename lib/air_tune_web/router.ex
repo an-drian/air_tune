@@ -1,5 +1,6 @@
 defmodule AirTuneWeb.Router do
   use AirTuneWeb, :router
+  use Pow.Phoenix.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -13,10 +14,25 @@ defmodule AirTuneWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", AirTuneWeb do
-    pipe_through :browser
+  pipeline :protected do
+    plug Pow.Plug.RequireAuthenticated,
+         error_handler: Pow.Phoenix.PlugErrorHandler
+  end
 
-    get "/", PageController, :index
+  scope "/" do
+    pipe_through :browser
+    pow_routes()
+  end
+
+  scope "/", AirTuneWeb do
+    pipe_through [:browser]
+    get "/", HomeController, :index
+  end
+
+  scope "/", AirTuneWeb do
+    pipe_through [:browser, :protected]
+
+    # Add your protected routes here
   end
 
   # Other scopes may use custom stacks.
