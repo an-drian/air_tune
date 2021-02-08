@@ -32,4 +32,6 @@ import_config "#{Mix.env()}.exs"
 
 config :air_tune, :pow,
        user: AirTune.Users.User,
-       repo: AirTune.Repo
+       repo: AirTune.Repo,
+       web_module: AirTuneWeb
+
