@@ -1,11 +1,23 @@
-<h1>
-  Most popular stations
-</h1>
-
-<ul>
-  <%= for s <- @stations do %>
-    <li>
-      <a href="<%= s.homepage %>"><%= s.name %></a>
-    </li>
-  <% end %>
-</ul>
+<div class="input-group mb-3">
+  <input type="text" class="form-control form-control-lg" placeholder="Search station by name" aria-label="Recipient's username" aria-describedby="button-addon2">
+  <button class="btn btn-large btn-outline-secondary" type="button" id="button-addon2">Search</button>
+</div>
+<div class="container">
+  <div class="row">
+    <h1>Most popular stations</h1>
+  </div>
+  <div class="row">
+    <%= for s <- @stations do %>
+      <div class="col-4">
+        <div class="card radio-card text-white bg-primary mb-3">
+          <div class="card-body" style="background-image: url(<%= radio_favicon(s.favicon) %>)">
+            <div class="card-body-mask"></div>
+            <h5 class="card-title"><%= s.name %></h5>
+            <button class="play-btn" data-url="<%= s.url_resolved %>"></button>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+<audio id="native-audio" controls></audio>

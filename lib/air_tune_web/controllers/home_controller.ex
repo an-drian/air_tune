@@ -1,18 +1,22 @@
 defmodule AirTuneWeb.HomeController do
   use AirTuneWeb, :controller
 
-  import Ecto.Query
   alias AirTune.Radio.Station
 
-  @repo AirTune.Repo
-
   def index(conn, _params) do
-    query = from s in Station,
-      select: %{name: s.name, homepage: s.homepage, clickcount: s.clickcount},
-      order_by: [desc: :clickcount],
-      limit: 10
-    stations = @repo.all(query)
+    stations = Station.get_popular_stations()
+    IO.inspect(stations)
 
     render(conn, "index.html", stations: stations)
   end
+
+  def search do
+
+  end
 end
+
+# SELECT *
+# FROM stations
+# INNER JOIN stations_tags st on stations.id = st.station_id
+# INNER JOIN tags t on t.id = st.tag_id
+# WHERE t.name LIKE '%rock%' OR stations.name LIKE '%rock%';

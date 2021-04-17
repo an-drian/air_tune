@@ -5,8 +5,9 @@ defmodule AirTune.Radio.Station do
 
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query
 
-  alias AirTune.Radio.{ Tag, Language, Country }
+  alias AirTune.Radio.{ Tag, Language, Country, Station }
 
   schema "stations" do
     field :name, :string
@@ -51,5 +52,20 @@ defmodule AirTune.Radio.Station do
     |> validate_required([:name, :url])
     |> validate_format(:url, ~r/^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/)
     |> unique_constraint([:url], message: "URL must be unique")
+  end
+
+  def get_popular_stations do
+    statiions_query = from station in Station,
+      select: %{
+        name: station.name,
+        homepage: station.homepage,
+        clickcount: station.clickcount,
+        url_resolved: station.url_resolved,
+        favicon: station.favicon
+      },
+      order_by: [desc: :clickcount],
+      limit: 9
+
+    AirTune.Repo.all(statiions_query)
   end
 end
