@@ -11,7 +11,8 @@ defmodule AirTune.Application do
       # Start the Ecto repository
       AirTune.Repo,
       # Start the endpoint when the application starts
-      AirTuneWeb.Endpoint
+      AirTuneWeb.Endpoint,
+      {Phoenix.PubSub, [name: AirTune.PubSub, adapter: Phoenix.PubSub.PG2]}
       # Starts a worker by calling: AirTune.Worker.start_link(arg)
       # {AirTune.Worker, arg},
     ]

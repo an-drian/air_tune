@@ -15,7 +15,7 @@ config :air_tune, AirTuneWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "SwYUbwwj05gAVnsuuR5vBJ5iCPpZFHnrAYLR+BjSTHhBYb0QlaDSs4L3DU90pyuJ",
   render_errors: [view: AirTuneWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: AirTune.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub_server: AirTune.PubSub
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -34,4 +34,3 @@ config :air_tune, :pow,
        user: AirTune.Users.User,
        repo: AirTune.Repo,
        web_module: AirTuneWeb
-
