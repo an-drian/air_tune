@@ -68,4 +68,27 @@ defmodule AirTune.Radio.Station do
 
     AirTune.Repo.all(statiions_query)
   end
+
+  def get_stations_by_search(keyword) do
+    like = "%#{keyword}%"
+    query = from s in Station,
+      left_join: t in assoc(s, :tags),
+      select: %{
+        id: s.id,
+        tag_id: t.id,
+        tag_name: t.name,
+        name: s.name,
+        url_resolved: s.url_resolved
+      },
+      where: ilike(s.name, ^like) or ilike(t.name, ^like),
+      limit: 50
+
+      AirTune.Repo.all(query)
+  end
 end
+
+# SELECT *
+# FROM stations
+# INNER JOIN stations_tags st on stations.id = st.station_id
+# INNER JOIN tags t on t.id = st.tag_id
+# WHERE t.name LIKE '%rock%' OR stations.name LIKE '%rock%';
